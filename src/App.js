@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
 import './App.css';
-import Map from './components/Map'
-import RTM from 'satori-sdk-js'
-import _ from 'lodash'
+import RTM from 'satori-sdk-js';
+import _ from 'lodash';
+import Map from './components/Map';
+import Routes from './components/Routes'
 // import ChannelService from './services/ChannelService'
 
 class App extends Component {
@@ -39,8 +40,6 @@ class App extends Component {
               bus.position = {lat: position.latitude, lng: position.longitude};
               this.setState({buses: this.state.buses}); 
             }else{
-               
-
               this.setState({buses:[...this.state.buses, {id: busId, 
                                     routeId: routeId,
                                     route: route,
@@ -66,11 +65,12 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Frontend Coding Exercise</h2>
         </div>
+        <Routes />
         <div style={{width: `100%`, height: 800, background: 'gray'}}>
           <Map
             buses={this.state.buses}
-            center={{ lat: 45.510433, lng: -122.72343 }}
-            zoom={8} 
+            center={{ lat: 45.542094, lng: -122.9346037 }}
+            zoom={10} 
             containerElement={<div style={{ height: `100%` }} />}
             mapElement={<div style={{ height: `100%` }} />}
           />

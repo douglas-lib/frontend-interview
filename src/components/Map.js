@@ -13,8 +13,7 @@ class Map extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({buses: nextProps.buses});
   }
-  render() {
-    
+  render() {  
     return (
       <GoogleMap
         defaultZoom={this.props.zoom}
