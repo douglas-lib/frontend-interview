@@ -83,8 +83,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Frontend Coding Exercise</h2>
+          <h2>Bus Transportation Map</h2>
         </div>
         <Routes className="App-routes" routes={this.state.routes}/>
         <div style={{width: `70%`, height: 800}}>
