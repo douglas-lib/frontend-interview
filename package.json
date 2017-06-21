@@ -5,6 +5,7 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "react": "^15.6.1",
+    "react-bootstrap": "^0.31.0",
     "react-dom": "^15.6.1",
     "react-google-maps": "^6.3.0",
     "satori-sdk-js": "^1.0.1"

@@ -17,6 +17,15 @@
   font-size: large;
 }
 
+.App-routes {
+	width: 30%;
+	float: right;
+}
+
+.App-map {
+	width: 60%;
+	height: 800;
+}
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

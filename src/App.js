@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
 import logo from './logo.png';
 import './App.css';
 import RTM from 'satori-sdk-js';
 import _ from 'lodash';
 import Map from './components/Map';
-import Routes from './components/Routes'
+import Routes from './components/Routes';
 // import ChannelService from './services/ChannelService'
 
 class App extends Component {
   
   constructor(props) {
     super(props);
-    this.state = {buses: []};
+    this.state = {
+      buses: [],
+      routes: []
+    };
   }
 
   componentDidMount(){
@@ -33,16 +37,33 @@ class App extends Component {
         if(msg.entity[0].vehicle.trip){
             const busId = msg.entity[0].id,
                   routeId = msg.entity[0].vehicle.trip.route_id,
-                  route = msg.entity[0].vehicle.vehicle.label,
+                  routeName = msg.entity[0].vehicle.vehicle.label,
                   position = msg.entity[0].vehicle.position;
-            const bus = _.find(this.state.buses, {id: busId});
+            const route = _.find(this.state.routes, {routeId: routeId});
+            if(route){
+                const busInRoute = _.find(route.buses, {busId: busId});
+                if(!busInRoute){
+                  route.amount++;
+                  route.buses.push({busId: busId});
+                  this.setState({routes: this.state.routes});
+                }
+            }else{
+              this.setState({routes:[...this.state.routes, {
+                                    routeId: routeId,
+                                    routeName: routeName,
+                                    buses: [{busId: busId}],
+                                    amount: 1}
+                                  ]
+                          });           
+            }  
+            const bus = _.find(this.state.buses, {busId: busId});
             if(bus){
               bus.position = {lat: position.latitude, lng: position.longitude};
               this.setState({buses: this.state.buses}); 
             }else{
-              this.setState({buses:[...this.state.buses, {id: busId, 
+              this.setState({buses:[...this.state.buses, {
+                                    busId: busId, 
                                     routeId: routeId,
-                                    route: route,
                                     position:{
                                       lat:position.latitude,
                                       lng:position.longitude}
@@ -65,16 +86,16 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Frontend Coding Exercise</h2>
         </div>
-        <Routes />
-        <div style={{width: `100%`, height: 800, background: 'gray'}}>
-          <Map
-            buses={this.state.buses}
-            center={{ lat: 45.542094, lng: -122.9346037 }}
-            zoom={10} 
-            containerElement={<div style={{ height: `100%` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-          />
-        </div>
+        <Routes className="App-routes" routes={this.state.routes}/>
+        <div style={{width: `70%`, height: 800}}>
+                <Map
+                  buses={this.state.buses}
+                  center={{ lat: 45.542094, lng: -122.9346037 }}
+                  zoom={10} 
+                  containerElement={<div style={{ height: `100%` }} />}
+                  mapElement={<div style={{ height: `100%` }} />}
+                />
+              </div>
       </div>
       
     );

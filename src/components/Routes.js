@@ -1,31 +1,41 @@
 
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 class Routes extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {buses: this.props.buses};
-  // }
-  // shouldComponentUpdate(nextProps, nextState) {
-  //  return nextProps.buses !== this.props.buses;
-  // } 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({buses: nextProps.buses});
-  // }
-  render() {  
+  constructor(props) {
+    super(props);
+    this.state = {routes: this.props.routes};
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+
+   return nextProps.routes !== this.props.routes;
+  } 
+  componentWillReceiveProps(nextProps) {
+    // console.log(nextProps.routes);
+    this.setState({routes: nextProps.routes});  
+  }
+  render() {
+    const list = this.state.routes.map( (route, i) => {
+      return (
+        <tr key={i}>
+          <td style={{textAlign:'left'}}>{route.routeName}</td>
+          <td>{route.amount}</td>
+        </tr>
+      );
+    });
+    
     return (
-      <table>
-        <thead>
+      <table style={{float: 'right'}}>
+         <tbody>
           <tr>
-            <th>Route</th>
-            <th>Buse Amount</th>
-          </tr> 
-          <tr>
-            <td>DASDASD</td>
-            <td>20</td>
-          </tr> 
-        </thead>  
+            <th>Routes</th>
+            <th>Amount</th>
+          </tr>
+          {list}
+         </tbody>
       </table>
+        
     );  
   }
 }
