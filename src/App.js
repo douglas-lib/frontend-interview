@@ -3,6 +3,7 @@ import logo from './logo.png';
 import './App.css';
 import Map from './components/Map'
 import RTM from 'satori-sdk-js'
+import _ from 'lodash'
 // import ChannelService from './services/ChannelService'
 
 class App extends Component {
@@ -29,13 +30,29 @@ class App extends Component {
       pdu.body.messages.forEach((msg) => {
         
         if(msg.entity[0].vehicle.trip){
-            const buskey = msg.entity[0].id,
-                  routekey = msg.entity[0].vehicle.trip.route_id,
+            const busId = msg.entity[0].id,
+                  routeId = msg.entity[0].vehicle.trip.route_id,
                   route = msg.entity[0].vehicle.vehicle.label,
                   position = msg.entity[0].vehicle.position;
-                 
-            this.setState({buses:[...this.state.buses, {position:{lat:position.latitude,lng:position.longitude}}]});
-          }
+            const bus = _.find(this.state.buses, {id: busId});
+            if(bus){
+              bus.position = {lat: position.latitude, lng: position.longitude};
+              this.setState({buses: this.state.buses}); 
+            }else{
+               
+
+              this.setState({buses:[...this.state.buses, {id: busId, 
+                                    routeId: routeId,
+                                    route: route,
+                                    position:{
+                                      lat:position.latitude,
+                                      lng:position.longitude}
+                                    }
+                                  ]
+                          });           
+            }     
+            
+        }
         
       });
     });
