@@ -7,7 +7,7 @@ class Map extends Component {
     super(props);
     this.state = {
       buses: this.props.buses,
-      choosen: ''
+      choosen: this.props.choosenRoute
     };
     // this.onMarkerClick = this.onMarkerClick.bind(this);
   }
@@ -18,7 +18,7 @@ class Map extends Component {
     this.setState({buses: nextProps.buses});
   }
   onMarkerClick(marker){
-    // console.log(marker);
+    this.props.handleRouteChoose();
     this.setState({choosen: marker.routeId});
   }
 

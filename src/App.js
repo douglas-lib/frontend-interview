@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
 import logo from './logo.png';
+import se from '../public/bus_icons/south_east.png';
+import sw from '../public/bus_icons/south_west.png';
+import ne from '../public/bus_icons/north_east.png';
+import nw from '../public/bus_icons/north_west.png';
+import ee from '../public/bus_icons/east.png';
+import ss from '../public/bus_icons/south.png';
+import ww from '../public/bus_icons/west.png';
+import nn from '../public/bus_icons/north.png';
 import './App.css';
 import RTM from 'satori-sdk-js';
 import _ from 'lodash';
@@ -33,7 +40,7 @@ class App extends Component {
     subscription.on('rtm/subscription/data', (pdu) => {
       
       pdu.body.messages.forEach((msg) => {
-        
+        console.log(msg);
         if(msg.entity[0].vehicle.trip){
             const busId = msg.entity[0].id,
                   routeId = msg.entity[0].vehicle.trip.route_id,
@@ -57,11 +64,33 @@ class App extends Component {
                           });           
             }  
             const bus = _.find(this.state.buses, {busId: busId});
+            const image = function (bearing){
+              if(bearing == 0){
+                return nn;
+              }else if(bearing > 0 && bearing <90 ){
+                return ne;
+              }else if(bearing == 90){
+                return ee;
+              }else if(bearing > 90 && bearing < 180){
+                return ne;
+              }else if(bearing == 180){
+                return ss;
+              }else if(bearing > 180 && bearing < 270){
+                return sw;
+              }else if(bearing == 270){
+                return ww;
+              }else if(bearing > 270 && bearing < 360){
+                return nw;
+              }
+            }(position.bearing)
+
             if(bus){
               bus.position = {lat: position.latitude, lng: position.longitude};
               this.setState({buses: this.state.buses}); 
             }else{
               this.setState({buses:[...this.state.buses, {
+                                    icon: image,
+                                    title: routeName,
                                     busId: busId, 
                                     routeId: routeId,
                                     position:{
